@@ -1,0 +1,50 @@
+[
+  {
+    "id": 2,
+    "nombre": "lcdtm",
+    "precio": "free"
+  },
+  {
+    "id": 3,
+    "nombre": "lcdtm",
+    "precio": "free"
+  },
+  {
+    "id": 4,
+    "nombre": "lcdtm",
+    "precio": "free"
+  },
+  {
+    "id": 5,
+    "nombre": "coca",
+    "precio": "10"
+  },
+  {
+    "id": 6,
+    "timestamp": "17:00",
+    "productos": {
+      "id": 6,
+      "timestamp": "17:00",
+      "nombre": "Macnifica",
+      "descripcion": "hamburguesa",
+      "codigo": "1578a",
+      "foto": "./fotos/mcnifica.jpg",
+      "precio": "290",
+      "stock": "159"
+    }
+  },
+  {
+    "timestamp": 1661462671173,
+    "id": 7
+  },
+  {
+    "timestamp": 1661462692543,
+    "id": 8
+  },
+  {
+    "nombre": "gorra",
+    "precio": "100",
+    "timestamp": 1661462716317,
+    "id": 9
+  }
+]

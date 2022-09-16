@@ -1,0 +1,25 @@
+[
+  {
+    "id": 1,
+    "nombre": "molleja",
+    "precio": "300"
+  },
+  {
+    "id": 2,
+    "nombre": "molleja",
+    "precio": "300"
+  },
+  {
+    "id": 11,
+    "nombre": "lcdtm",
+    "precio": "free"
+  },
+  {
+    "id": 12
+  },
+  {
+    "nombre": "coca",
+    "precio10": "",
+    "id": 13
+  }
+]

@@ -1,6 +1,7 @@
 const fs = require ('fs')
 
 class ContenedorCarrito {
+
     constructor (ruta) {
         this.ruta = ruta;
     }

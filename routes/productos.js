@@ -30,11 +30,11 @@ const router = express.Router();
 //   }
 
 const productController  = require('../src/mongoDB/contenedores/productoMongo.js')
-
-const connectDB = require('../src/mongoDB/connection/mongoDb')
+// const productController1 = new productController
+// const connectDB = require('../src/mongoDB/connection/mongoDb')
+// connectDB()
 const Producto = require('../src/mongoDB/daos/productoMongo');
 
-connectDB()
 
 router.get('/', async (req, res) => {  
     const productos = await Producto.find();
@@ -48,7 +48,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {  
     const creacionProducto = req.body
- 
+    
     const newProducto = new Producto(creacionProducto);
     await newProducto.save()
     res.json({

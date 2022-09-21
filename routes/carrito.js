@@ -1,9 +1,20 @@
 const express = require('express'); 
 const app = express();  
 app.use(express.json())
+app.use(express.urlencoded({extended:true}))
  
 const router = express.Router()
 
+// switch(process.env.NODE_ENV) {
+//     case 'mongodb':
+//         cartController = require('../controllers/carritoMongo');
+//       break;
+//     // case y:
+//       // code block
+//     //   break;
+//     default:
+//         cartController = require('../controllers/carritoTxt')
+//   }
 
 // aguanta
 // switch (process.env.NODE_ENV) {
@@ -17,7 +28,6 @@ const router = express.Router()
     //   cartController = require('../controllers/cartControllerFile');
 //   }
 
-const cartController  = require('../controllers/carritoMongo')
 // router.route('/').post(cartController.createCart);
 // router.route('/:id').delete(cartController.deleteCart);
 // router
@@ -32,45 +42,45 @@ const cartController  = require('../controllers/carritoMongo')
 // const contenedorCarrito = require('../controllers/carritoTxt');
 // const funcionesCarrito = new contenedorCarrito ('./carrito.txt')
 
+const cartController  = require('../src/mongoDB/contenedores/carritoMongo.js')
+const connectDB = require('../src/mongoDB/connection/mongoDb')
+const Producto = require('../src/mongoDB/daos/carritoMongo');
+
+connectDB()
+
 router.get('/', async (req, res) => {  
-    cartController.createCart 
-    // const archivo = await funcionesCarrito.leerArchivo()
-    // res.send(archivo);  
+    // cartController.createCart 
+    // res.json('Carrito Creado');  
+    const productos = await Producto.find();
+    res.json({productos});
 });
 
-// router.get('/:id', async (req, res) => {  
-//     const {id} = req.params
-//     const idParseado = parseInt(id)
-//     const archivo = await funcionesCarrito.leerElementoDeArchivoPorId(idParseado)
-//     res.send(archivo)
-// });
+router.get('/:id', async (req, res) => {  
+    const buscaPorId = await Producto.findById(req.params.id)
+    res.json({buscaPorId});
+});
 
-// router.post('/', async (req, res) => {  
-//     const data = req.query
+router.post('/', async (req, res) => {  
+    const creacionProducto = req.body
+ 
+    const newProducto = new Producto(creacionProducto);
+    await newProducto.save()
+    res.json({
+        newProducto
+    })
 
-//     await funcionesCarrito.agregarElemento(data)
+/*     const agregoProducto = await cartController.save(producto)  */
 
-//     res.json({
-//         msg:'¡Agregado exitosamente!',
-//         data
-//     })
-// });
+    // res.json({
+    //     msg:`Producto agregado ${producto}`/* ,
+    //     obj:agregoProducto */
+    // });  
+});
 
-// router.put('/:id', async (req, res) => { 
-//     const { id }= req.params 
-//     const dataNueva = req.query 
-//     const archivo = await funcionesCarrito.actualizarElementoDeArchivoPorId( {id: parseInt(id) , ...dataNueva} )
-//     res.send(archivo);
-// })
+router.delete('/:id', async (req, res) => {  
+    const elimina = await Producto.findByIdAndDelete(req.params.id)
+    res.json({elimina})
+});
 
-// router.delete('/:id', async (req, res) => { 
-//     const { id } = req.params
-
-//     await funcionesCarrito.eliminar(id)
-
-//     res.json({
-//         msj:'deleted',
-//     })
-// })
  
 module.exports = router;

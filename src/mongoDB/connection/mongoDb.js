@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 
 // mongodb+srv://silvestre:Chiveria12!@cluster0.nzjdktb.mongodb.net/test
 
-
 const connectDB = async () => {
     try {
         const url = 'mongodb://localhost:27017/ecommerce'

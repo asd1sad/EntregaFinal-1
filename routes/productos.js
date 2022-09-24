@@ -29,36 +29,66 @@ const router = express.Router();
     //   cartController = require('../controllers/cartControllerFile');
 //   }
 
-const productController  = require('../src/mongoDB/contenedores/productoMongo.js')
+// const productController  = require('../src/mongoDB/contenedores/productoMongo.js')
+
 // const productController1 = new productController
-// const connectDB = require('../src/mongoDB/connection/mongoDb')
-// connectDB()
+const connectDB = require('../src/mongoDB/connection/mongoDb')
+
+const productController = require('../src/mongoDB/daos/productoMongo');
+const producto = new productController(connectDB());
+
 const Producto = require('../src/mongoDB/daos/productoMongo');
 
-
 router.get('/', async (req, res) => {  
-    const productos = await Producto.find();
-    res.json({productos});
+    // const productos = await Producto.find(); res.json({productos});
+    const rta = await productController.find()
+    res.json({rta})
 });
 
 router.get('/:id', async (req, res) => {  
-    const buscaPorId = await Producto.findById(req.params.id)
-    res.json({buscaPorId});
+    const rta = await productController.findById(req.params.id)
+    res.json({rta})
 });
 
 router.post('/', async (req, res) => {  
     const creacionProducto = req.body
-    
+
     const newProducto = new Producto(creacionProducto);
     await newProducto.save()
     res.json({
         newProducto
     })
+    // console.log(creacionProducto);
+    // res.end()
+    // const rta = await productController.guardar(creacionProducto)
+    // res.json(rta)
 });
 
 router.delete('/:id', async (req, res) => {  
-    const elimina = await Producto.findByIdAndDelete(req.params.id)
+    const elimina = await productController.findByIdAndDelete(req.params.id)
     res.json({elimina})
 });
 
 module.exports = router;
+
+// router.get('/', async (req, res) => {   
+//     // const productos = await Cart.find(); res.json({productos});
+//     const rta = await carrito.find()
+//     res.json({rta})
+// });
+
+// router.get('/:id', async (req, res) => {  
+//     // const buscaPorId = await Producto.findById(req.params.id);res.json({buscaPorId});
+//     const rta = await carrito.findById(req.params.id)
+//     res.json({rta})
+// });
+
+// router.post('/', async (req, res) => {  
+//     const rta = await carrito.guardar(req.body);
+//     res.json(rta)
+// });
+
+// router.delete('/:id', async (req, res) => {  
+//     const rta = await carrito.deleteById(req.params.id);
+//     res.json(rta)
+// });

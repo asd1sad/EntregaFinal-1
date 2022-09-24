@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
   timestamp: { type: Date, default: Date.now },
-  name: {type: String, required: true, trim: [true, 'Title is required'],
-  }/* ,
+  name: {type: String, required: true}
+  /* ,
   description: {
     type: String,
     required: [true, 'Description is required'],

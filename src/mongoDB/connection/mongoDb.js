@@ -4,7 +4,6 @@ const mongoose = require('mongoose')
 
 const connectDB = async () => {
     try {
-        // const url = 'mongodb://localhost:27017/ecommerce'
         const url ='mongodb://localhost:27017/ecommerce'
         // const url = process.env.MONGODB_CONNECT
         await mongoose.connect(url, {

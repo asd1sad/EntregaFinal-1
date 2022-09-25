@@ -4,91 +4,195 @@ const app = express();
 app.use(express.json({ extended: true }))
  
 const router = express.Router();
+
 // const contenedor = require('../bdd/txtFiles/controllers/productosTxt.js');
 // const funciones = new contenedor('./db.txt')
 
-// router
-//   .route('/')
-//   .get(productController.getProducts)
-//   .post(productController.isAdmin, productController.createProduct);
-// router
-//   .route('/:id')
-//   .get(productController.getProduct)
-//   .put(productController.isAdmin, productController.updateProduct)
-//   .delete(productController.isAdmin, productController.deleteProduct);
+//!ELEGI TU DATABASE
+const database = 'firebase'
 
-// aguanta
-// switch (process.env.NODE_ENV) {
-//     case 'mongodb':
-//       cartController = require('../controllers/cartControllerMongoDB');
-//       break;
-    // case 'firebase':
-    //   cartController = require('../controllers/cartControllerFirebase');
-    //   break;
-    // default:
-    //   cartController = require('../controllers/cartControllerFile');
-//   }
+if(database === 'mongodb'){
+    const productControllerMongoDB  = require('../src/mongoDB/contenedores/productoMongo.js')
 
+    const productController = new productControllerMongoDB()
+    const connectDB = require('../src/mongoDB/connection/mongoDb')
+    
+    const Producto          = require('../src/mongoDB/daos/productoMongo');
+    
+    router.get('/', async (req, res) => {  
+        const rta = await productController.find()
+        res.json({rta})
+    });
+    
+    router.get('/:id', async (req, res) => {  
+        const rta = await productController.findById(req.params.id)
+        res.json({rta})
+    });
+    
+    router.post('/', async (req, res) => {  
+        const creacionProducto = req.body
+        const newProducto = new Producto(creacionProducto);
+        await newProducto.save()
+        res.json({
+            newProducto
+        })
+    });
+    
+    router.delete('/:id', async (req, res) => {  
+        const elimina = await productController.findByIdAndDelete(req.params.id)
+        res.json({elimina})
+    });
+    
+    module.exports = router;
+}
+else if(database === 'firebase'){
+    const productControllerFirebase = require('../src/firebase/contenedores/productosFB.js') ;
+    const productController         = new productControllerFirebase()
+
+    router.get('/:id' , async (req,res) => {
+        const produtoId = await productController.getById(req.params.id);
+        res.send(produtoId);
+    })
+
+    router.get('/' , async (req,res) => {
+        await productController.getAll()
+        res.json('ok')
+    })
+
+    router.post('/' , async (req,res) => {
+        const productoCreado = await productController.addToCart(req.body);
+        if (!productoCreado?.error){
+            res.json({
+                ok: true,
+                mensaje: 'El Post se agrego correctamente',
+                id: productoCreado
+            })
+        }else {
+            res.json({
+                ok: false,
+                mensaje: 'El post no se agrego por que el objeto esta vacio',
+                error: productoCreado?.error,
+            })
+        }
+    })
+
+    router.put('/:id' , async (req,res) => {
+        const productoCreado = await productController.update(req.params.id, req.body);
+        if (!productoCreado?.error){
+            res.json({
+                ok: true,
+                mensaje: 'El Post se edito correctamente',
+                id: productoCreado
+            })
+        }else {
+            res.json({
+                ok: false,
+                mensaje: 'El post no se pudo editar ',
+                error: productoCreado?.error,
+            })
+        }
+    })
+
+    router.delete('/:id' , async (req,res) => {
+        await productController.delete(req.params.id)
+        res.json('eliminado')
+    })
+
+    module.exports = router;
+}
+else{
+    console.log('hola');
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                  FIREBASE                                  */
+/* -------------------------------------------------------------------------- */
+// const contenedor        = require('../src/firebase/contenedores/productosFB.js') ;
+// const productController = new contenedor()
+
+// router.get('/:id' , async (req,res) => {
+//     const produtoId = await productController.getById(req.params.id);
+//     res.send(produtoId);
+// })
+
+// router.get('/' , async (req,res) => {
+//     await productController.getAll()
+//     res.json('ok')
+// })
+
+// router.post('/' , async (req,res) => {
+//     const productoCreado = await productController.addToCart(req.body);
+//     if (!productoCreado?.error){
+//         res.json({
+//             ok: true,
+//             mensaje: 'El Post se agrego correctamente',
+//             id: productoCreado
+//         })
+//     }else {
+//         res.json({
+//             ok: false,
+//             mensaje: 'El post no se agrego por que el objeto esta vacio',
+//             error: productoCreado?.error,
+//         })
+//     }
+// })
+
+// router.put('/:id' , async (req,res) => {
+//     const productoCreado = await productController.update(req.params.id, req.body);
+//     if (!productoCreado?.error){
+//         res.json({
+//             ok: true,
+//             mensaje: 'El Post se edito correctamente',
+//             id: productoCreado
+//         })
+//     }else {
+//         res.json({
+//             ok: false,
+//             mensaje: 'El post no se pudo editar ',
+//             error: productoCreado?.error,
+//         })
+//     }
+// })
+
+// router.delete('/:id' , async (req,res) => {
+//     await productController.delete(req.params.id)
+//     res.json('eliminado')
+// })
+
+/* -------------------------------------------------------------------------- */
+/*                                   MONGODB                                  */
+/* -------------------------------------------------------------------------- */
 // const productController  = require('../src/mongoDB/contenedores/productoMongo.js')
 
 // const productController1 = new productController
-const connectDB = require('../src/mongoDB/connection/mongoDb')
+// const connectDB = require('../src/mongoDB/connection/mongoDb')
 
-const productController = require('../src/mongoDB/daos/productoMongo');
-const producto = new productController(connectDB());
+// // const producto          = new productController(connectDB());
 
-const Producto = require('../src/mongoDB/daos/productoMongo');
+// const Producto          = require('../src/mongoDB/daos/productoMongo');
 
-router.get('/', async (req, res) => {  
-    // const productos = await Producto.find(); res.json({productos});
-    const rta = await productController.find()
-    res.json({rta})
-});
-
-router.get('/:id', async (req, res) => {  
-    const rta = await productController.findById(req.params.id)
-    res.json({rta})
-});
-
-router.post('/', async (req, res) => {  
-    const creacionProducto = req.body
-
-    const newProducto = new Producto(creacionProducto);
-    await newProducto.save()
-    res.json({
-        newProducto
-    })
-    // console.log(creacionProducto);
-    // res.end()
-    // const rta = await productController.guardar(creacionProducto)
-    // res.json(rta)
-});
-
-router.delete('/:id', async (req, res) => {  
-    const elimina = await productController.findByIdAndDelete(req.params.id)
-    res.json({elimina})
-});
-
-module.exports = router;
-
-// router.get('/', async (req, res) => {   
-//     // const productos = await Cart.find(); res.json({productos});
-//     const rta = await carrito.find()
+// router.get('/', async (req, res) => {  
+//     const rta = await productController.find()
 //     res.json({rta})
 // });
 
 // router.get('/:id', async (req, res) => {  
-//     // const buscaPorId = await Producto.findById(req.params.id);res.json({buscaPorId});
-//     const rta = await carrito.findById(req.params.id)
+//     const rta = await productController.findById(req.params.id)
 //     res.json({rta})
 // });
 
 // router.post('/', async (req, res) => {  
-//     const rta = await carrito.guardar(req.body);
-//     res.json(rta)
+//     const creacionProducto = req.body
+//     const newProducto = new Producto(creacionProducto);
+//     await newProducto.save()
+//     res.json({
+//         newProducto
+//     })
 // });
 
 // router.delete('/:id', async (req, res) => {  
-//     const rta = await carrito.deleteById(req.params.id);
-//     res.json(rta)
+//     const elimina = await productController.findByIdAndDelete(req.params.id)
+//     res.json({elimina})
 // });
+
+// module.exports = router;

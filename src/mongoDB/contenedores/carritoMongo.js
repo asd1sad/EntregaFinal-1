@@ -1,10 +1,12 @@
 const Carrito = require('../daos/carritoMongo');
 // const connectDB = require('../connection/mongoDb')
+const connectDB = require('../connection/mongoDb.js');
 
-class CartController {
+class CartController{
 
   constructor (db) {
-      this.db = db /* connect() */
+      // this.db = db /* connect() */
+        this.db = connectDB()
   }
  
   async find() {

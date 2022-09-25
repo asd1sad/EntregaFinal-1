@@ -1,5 +1,7 @@
 const fs = require ('fs')
 
+console.log('textFiles');
+
 class ContenedorCarrito {
 
     constructor (ruta) {

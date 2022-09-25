@@ -26,22 +26,3 @@ const productSchema = new mongoose.Schema({
 const Product = mongoose.model('Producto', productSchema);
 
 module.exports = Product;
-
-
-// import * as Mongoose from "mongoose";
-  
-// const ProductosSchema = new Mongoose.Schema({
-//     producto: String,
-//     thumbnail: String,
-//     precio: Number,
-//     dateOfJoining: {
-//         type: Date,
-//         default: new Date(),
-//     },
-//     lastUpdated: {
-//         type: Date,
-//         default: new Date(),
-//     },
-// });
-  
-// export default ProductosSchema;

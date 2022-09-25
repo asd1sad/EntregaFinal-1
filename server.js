@@ -19,16 +19,16 @@
 
 //     console.log('Using MongoDB!');
 //     break;
-// //   case 'firebase':
-// //     const admin = require('firebase-admin');
-// //     const serviceAccount = require('./ch-ecommerce-api-firebase-adminsdk-wb3pi-b93aee5864.json');
+//   case 'firebase':
+//     const admin = require('firebase-admin');
+//     const serviceAccount = require('./ch-ecommerce-api-firebase-adminsdk-wb3pi-b93aee5864.json');
 
-// //     admin.initializeApp({
-// //       credential: admin.credential.cert(serviceAccount),
-// //     });
+//     admin.initializeApp({
+//       credential: admin.credential.cert(serviceAccount),
+//     });
 
-// //     console.log('Using Firebase!');
-// //     break;
+//     console.log('Using Firebase!');
+//     break;
 //   default:
 //     console.log('Using File System!');
 // }
